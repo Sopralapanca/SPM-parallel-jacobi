@@ -1,0 +1,5 @@
+# ninja log v5
+23	3508	6758032295685509	CMakeFiles/JacobiSPM.dir/utils/utimer.cpp.obj	56ec5a4b836385ab
+16	5900	6759755504642053	CMakeFiles/JacobiSPM.dir/main.cpp.obj	8bb023e12a8aecdc
+5902	7113	6759755516700554	JacobiSPM.exe	461d8c9934872d90
+12	1294	6760555577594688	build.ninja	78b6596bbf70d0dc

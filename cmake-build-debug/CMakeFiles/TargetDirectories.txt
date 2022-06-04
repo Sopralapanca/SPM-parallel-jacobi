@@ -1,0 +1,3 @@
+D:/giaco/Programmi/C++Projects/JacobiSPM/cmake-build-debug/CMakeFiles/JacobiSPM.dir
+D:/giaco/Programmi/C++Projects/JacobiSPM/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/giaco/Programmi/C++Projects/JacobiSPM/cmake-build-debug/CMakeFiles/rebuild_cache.dir
