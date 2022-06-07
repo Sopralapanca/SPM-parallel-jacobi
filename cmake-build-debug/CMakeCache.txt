@@ -25,7 +25,7 @@ CMAKE_AR:FILEPATH=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/mingw/bin/ar.e
 CMAKE_BUILD_TYPE:STRING=Debug
 
 //CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/mingw/bin/g++.exe
+CMAKE_CXX_COMPILER:STRING=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/mingw/bin/g++.exe
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -54,7 +54,7 @@ CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_CXX_STANDARD_LIBRARIES:STRING=-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
 
 //C compiler
-CMAKE_C_COMPILER:FILEPATH=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/mingw/bin/gcc.exe
+CMAKE_C_COMPILER:STRING=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/mingw/bin/gcc.exe
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -256,9 +256,9 @@ CMAKE_CACHEFILE_DIR:INTERNAL=d:/giaco/Programmi/C++Projects/JacobiSPM/cmake-buil
 //Major version of cmake used to create the current loaded cache
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
-CMAKE_CACHE_MINOR_VERSION:INTERNAL=21
+CMAKE_CACHE_MINOR_VERSION:INTERNAL=22
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=1
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=3
 //Path to CMake executable.
 CMAKE_COMMAND:INTERNAL=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/cmake/win/bin/cmake.exe
 //Path to cpack program executable.
@@ -370,7 +370,7 @@ CMAKE_RC_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_READELF
 CMAKE_READELF-ADVANCED:INTERNAL=1
 //Path to CMake installation.
-CMAKE_ROOT:INTERNAL=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.21
+CMAKE_ROOT:INTERNAL=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/cmake/win/share/cmake-3.22
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS
 CMAKE_SHARED_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_DEBUG

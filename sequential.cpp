@@ -1,10 +1,10 @@
 #include <iostream>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <vector>
 #include <random>
 
 #include "./utils/utimer.cpp"
-
+#include <fstream>
 
 /*
 The Jacobi iterative method computes the result of a system of equations
@@ -21,6 +21,9 @@ We require to implement the Jacobi method with both native C++ threads and FastF
  */
 
 using namespace std;
+
+random_device rd;
+mt19937 gen(rd());
 
 void print_matrix(vector<vector<double>> matrix, int size){
     // Printing the  matrix
@@ -40,9 +43,8 @@ void print_vector(vector<double> vector){
 }
 
 
-vector<double> GenerateRandomVector(int size,int min, int max) {
-    random_device rd;
-    mt19937 gen(rd());
+vector<double> GenerateRandomVector(int size,int min, int max, int seed) {
+    gen.seed(seed);
 
     vector<double> vec(size);
     uniform_real_distribution<> dis(min, max);
@@ -64,12 +66,24 @@ vector<double> compute_b(vector<vector<double>> a, vector<double> x, int size) {
     return b;
 }
 
-vector<vector<double>> GenerateRandomMatrix(double n){
+vector<vector<double>> GenerateRandomMatrix(int n, int seed){
     vector<vector<double>> matrix(n, vector<double>(n));
 
-    int i;
-    for( i = 0; i < n; i++){
-        matrix[i] = GenerateRandomVector(n, 0.0, 10.0);
+    vector<int> seeds_vector(n);
+    gen.seed(seed);
+
+    uniform_int_distribution<int> dis(0, 10000);
+    generate(seeds_vector.begin(), seeds_vector.end(), [&](){ return dis(gen); });
+
+    cout << "seeds" << endl;
+    // Printing the  matrix
+    for (int i = 0; i < seeds_vector.size(); i++){
+        cout << seeds_vector[i] << " ";
+        cout << endl;
+    }
+
+    for( int i = 0; i < n; i++){
+        matrix[i] = GenerateRandomVector(n, 0.0, 10.0, seeds_vector[i]);
     }
     return matrix;
 }
@@ -77,12 +91,13 @@ vector<vector<double>> GenerateRandomMatrix(double n){
 int main(int argc, char * argv[]) {
     int n = atoi(argv[1]); // matrix size
     int k = atoi(argv[2]); // number of iterations
+    int seed = 123; //int seed = atoi(argv[3]);
 
     // generate a random linear system
-    vector<vector<double>> matrix = GenerateRandomMatrix(n);
+    vector<vector<double>> matrix = GenerateRandomMatrix(n, seed);
 
     vector<double> real_x(n);
-    real_x = GenerateRandomVector(n, 0.0, 1.0);
+    real_x = GenerateRandomVector(n, 0.0, 1.0, seed);
 
     // compute the linear system to find b
     vector<double> b(n);
@@ -92,8 +107,6 @@ int main(int argc, char * argv[]) {
     vector<double> x(n, 0.0);
 
     long u;
-
-    // sequential part
     {
         utimer tseq("Seq", &u);
         // numero di iterazioni
@@ -111,34 +124,23 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-
-    cout << "time per iteration = " << u/k << endl;
-
-    cout << "solution" << endl;
-    print_vector(x);
-
+    // fix
     /*
-    for (int j=0; j<k; j++){
-        for (int w = 0; w < n; w++){
-            int sum=0;
-            for(int row= 0; row < n; row++){
-                for( int col=row+1;  col < n; col++){
-                    sum += a[i][j]*x[col];
-                }
-            }
-            temp_x[w]=(b[w]-sum)/a[w][w];
-        }
-        for(int l= 0; l < n; l++){
-            x[l]=temp_x[l];
-        }
-    }
+    ofstream myfile;
+    myfile.open ("sequential_times.txt");
 
-    for( i = 0; i < n; ++i){
-        std::cout<<x[i]<<'\n';
-    }*/
+    myfile << "Total execution time: " << u <<"usec\n";
+    myfile << "Time per iteration: " << u/k <<"usec\n";
+
+    myfile.close();
+    */
 
 
+    cout << "Total execution time: " << u <<"usec" << endl;
+    cout << "Time per iteration = " << u/k <<"usec"<< endl;
 
+
+    // compute some overheads
 
     return 0;
 }
