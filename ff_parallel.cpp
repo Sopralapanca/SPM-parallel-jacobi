@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <vector>
 #include <random>
-#include <algorithm>
-
+#include <ff/ff.hpp>
+#include <ff/parallel_for.hpp>
 #include "./utils/utimer.cpp"
+#include <fstream>
 
 /*
 The Jacobi iterative method computes the result of a system of equations
@@ -20,9 +21,7 @@ We require to implement the Jacobi method with both native C++ threads and FastF
 
  */
 
-// per vedere se è vettorizzabile
-// g++ sequential.cpp -O3 -funroll-loops -ftree-vectorize -fopt-info-vec-all -o sequential |& grep sequential
-// è una map secca, dovrebbe avere uno speedup lineare dove c'è l'overhead?
+// compile with g++ -I ../fastflow/ -pthread -O3 ff_parallel.cpp  -o ff_parallel
 
 using namespace std;
 
@@ -86,18 +85,15 @@ vector<vector<double>> GenerateRandomMatrix(int n, int seed){
 }
 
 int main(int argc, char * argv[]) {
-    if(argc != 3){
-        cout << "Usage: matrix_size number_of_iterations" << endl;
+    if(argc != 4){
+        cout << "Usage: matrix_size number_of_iterations number_of_threads" << endl;
         return (0);
     }
 
     int n = atoi(argv[1]); // matrix size
     int k = atoi(argv[2]); // number of iterations
+    int nw = atoi(argv[3]);
     int seed = 123; //int seed = atoi(argv[3]);
-
-
-    // try to vectorize the sequential part, make a comparison between vectorized and not vectorizer
-    // controllare se vettorizza
 
     // generate a random linear system
     vector<vector<double>> matrix = GenerateRandomMatrix(n, seed);
@@ -110,26 +106,33 @@ int main(int argc, char * argv[]) {
     b=compute_b(matrix, real_x, n);
 
     // initialize a vector with all zeroes to be used to find a solution using Jacobi
-    vector<double> x(n, 0.0);
+    vector<double> x(n, 0.0), new_x(n, 0.0);
+
 
     long u;
     {
-        utimer tseq("Seq", &u);
+        utimer tpar("Par", &u);
+        ff::ParallelFor pf(nw, true);
         // numero di iterazioni
+
         for (int it=0; it<k; it++) {
+            pf.parallel_for(0, n, 1,
+                             0, //dimensione chunksize, 0-> fai tu provare anche altri
+                            [&](const int i){
+                                int sum = 0;
+                                for (int j = i + 1; j < n; j++) {
+                                    sum = matrix[i][j] * x[j];
+                                }
 
-            //iterate over b and x
-            for(int i=0; i<n;i++) {
-                //compute sum
-                int sum = 0;
-                for (int j = i + 1; j < n; j++) {
-                    sum = matrix[i][j] * x[j];
-                }
+                                new_x[i] = (b[i] - sum) / matrix[i][i];
+                            }, nw);
+            x=new_x;
 
-                x[i] = (b[i] - sum) / matrix[i][i];
-            }
+
         }
     }
+
+    // è un operazione di map
     // fix
     /*
     ofstream myfile;
