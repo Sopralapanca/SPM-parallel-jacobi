@@ -1,17 +1,17 @@
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
-#include <barrier>
 #include <atomic>
 #include <queue>
 #include <mutex>
 #include <functional>
+#include <algorithm>
 #include <future>
-#include <vector>
 #include <random>
-#include <fstream>
+#include <sched.h>
+#include <thread>
 
-#include "./utils/utimer.cpp"
+#include "../utils/utimer.cpp"
 
 /*
 The Jacobi iterative method computes the result of a system of equations
@@ -26,6 +26,11 @@ starting from some initial assignment of each xi (e.g. 0).
 We require to implement the Jacobi method with both native C++ threads and FastFlow.
 
  */
+
+// execute with
+//for((i=1;i<33;i*=2)); do ./parallel2 20000 10 $i; done
+
+// if matrix is small Tseq < Tsetup parallel scrivere nel report
 
 using namespace std;
 
@@ -61,7 +66,8 @@ vector<double> GenerateRandomVector(int size,int min, int max, int seed) {
 
 vector<double> compute_b(vector<vector<double>> a, vector<double> x, int size) {
     vector<double> b(size);
-    int i, j, sum;
+    int i, j;
+    double sum;
     for (i=0;i<size;i++){
         sum=0;
         for(j=0;j<size;j++){
@@ -90,9 +96,14 @@ vector<vector<double>> GenerateRandomMatrix(int n, int seed){
 
 
 int main(int argc, char * argv[]) {
+    if(argc != 4){
+        cout << "Usage: matrix_size number_of_iterations number_of_threads" << endl;
+        return (0);
+    }
+
     int n = atoi(argv[1]); // matrix size
     int k = atoi(argv[2]); // number of iterations
-    int nw = atoi(argv[3]);
+    int nw = atoi(argv[3]); // number of threads
     int seed = 123; //int seed = atoi(argv[3]);
 
     // generate a random linear system
@@ -121,8 +132,21 @@ int main(int argc, char * argv[]) {
         cond.notify_all();
     };
 
+    //evita di riempire una coda, fai semplicemente aspettare i thread su una variabile di condizionamento?
+    // dovrei gestire un contatore per contare i thread che hanno finito
+    vector<thread> tids(nw);
+
     // reader
     auto body = [&](int tid){
+        cpu_set_t cpuset;
+        CPU_ZERO(&cpuset);
+        CPU_SET(tid, &cpuset);
+        int rc = pthread_setaffinity_np(tids[tid].native_handle(),
+                                        sizeof(cpu_set_t), &cpuset);
+        if (rc != 0) {
+            std::cerr << "Error calling pthread_setaffinity_np: " << rc << "\n";
+        }
+
         while(true){
             function<void()> t = []() {return 0; };
             {
@@ -143,20 +167,31 @@ int main(int argc, char * argv[]) {
     };
 
     vector<double> new_x(n, 0.0);
+    vector<pair<int,int>> ranges(nw);                     // vector to compute the ranges
+    int delta { n / nw };
+
+    //rivedere load unbalanced ultimo chunk
+    for(int i=0; i<nw; i++) {                     // split the string into pieces
+        ranges[i] = make_pair(i*delta,(i != (nw-1) ? (i+1)*delta : n));
+    }
 
 
     // function to be executed by the threads
-    auto f = [&](int index){
-        int sum = 0;
-        for (int j = index + 1; j < n; j++) {
-            sum = matrix[index][j] * x[j];
+    // calcola tempi somma, mostra che sono inferiori ai tempi di creazione threads, inutile parallelizzare
+    auto f = [&](pair<int,int> ranges){
+        double sum = 0;
+        for (int i=ranges.first; i< ranges.second; i++){
+            for (int j = i + 1; j < n; j++) {
+                sum = matrix[i][j] * x[j];
+            }
+        new_x[i] = (b[i] - sum) / matrix[i][i];
         }
-        new_x[index] = (b[index] - sum) / matrix[index][index];
+
 
         dispatcher.notify_one();
     };
 
-    vector<thread> tids(nw);
+
 
     for(int tid=0; tid<nw; tid++){
         tids[tid] = thread(body, tid);
@@ -165,8 +200,8 @@ int main(int argc, char * argv[]) {
     {
         utimer tpar("Par", &u);
         for (int it = 0; it < k; it++) {
-            for (int index = 0; index < n; index++) {
-                auto fx = (bind(f, index));
+            for (int index = 0; index < nw; index++) {
+                auto fx = (bind(f, ranges[index]));
                 bind_submit(fx);
             }
 
@@ -187,7 +222,8 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    cout << "Total execution time: " << u <<"usec" << endl;
+
+    cout << "Total execution time: " << u <<" usec" << endl;
     cout << "Time per iteration = " << u/k <<"usec"<< endl;
 
     auto stopTp = [&](){
@@ -205,9 +241,9 @@ int main(int argc, char * argv[]) {
 
 
 
-    RIMUOVI EXTERN
-    SOSTITUISCI DOUBLE CON FLOAT PER RENDERE IL CODICE VETTORIZZABILE
-    fai la moltiplicazione per chunk e non per riga per cache locality
+    //RIMUOVI EXTERN
+    //SOSTITUISCI DOUBLE CON FLOAT PER RENDERE IL CODICE VETTORIZZABILE
+    //fai la moltiplicazione per chunk e non per riga per cache locality
     // to fix
     /*
     ofstream myfile;
@@ -225,6 +261,16 @@ int main(int argc, char * argv[]) {
 
 
     // compute some overheads
+    // disabilita cache coherence protocol
+    // pinna i thread sui core
 
+    cout << "MATRIX A" << endl;
+    print_matrix(matrix, n);
+
+    cout << "vector b" << endl;
+    print_vector(b);
+
+    cout << "vector x" << endl;
+    print_vector(x);
     return 0;
 }

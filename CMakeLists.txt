@@ -4,4 +4,4 @@ project(JacobiSPM)
 set(CMAKE_CXX_STANDARD 20)
 add_compile_options(-O3)
 
-add_executable(JacobiSPM sequential.cpp parallel2.cpp ./utils/utimer.cpp)
+add_executable(JacobiSPM parallel_chunks3_barrier.cpp ./utils/utimer.cpp utils/utility.h utils/utility.cpp)

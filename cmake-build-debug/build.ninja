@@ -49,20 +49,20 @@ cmake_ninja_workdir = D$:/giaco/Programmi/C++Projects/JacobiSPM/cmake-build-debu
 
 build cmake_object_order_depends_target_JacobiSPM: phony || CMakeFiles/JacobiSPM.dir
 
-build CMakeFiles/JacobiSPM.dir/sequential.cpp.obj: CXX_COMPILER__JacobiSPM_Debug D$:/giaco/Programmi/C++Projects/JacobiSPM/sequential.cpp || cmake_object_order_depends_target_JacobiSPM
-  DEP_FILE = CMakeFiles\JacobiSPM.dir\sequential.cpp.obj.d
-  FLAGS = -g -O3 -std=gnu++20
-  OBJECT_DIR = CMakeFiles\JacobiSPM.dir
-  OBJECT_FILE_DIR = CMakeFiles\JacobiSPM.dir
-
-build CMakeFiles/JacobiSPM.dir/parallel2.cpp.obj: CXX_COMPILER__JacobiSPM_Debug D$:/giaco/Programmi/C++Projects/JacobiSPM/parallel2.cpp || cmake_object_order_depends_target_JacobiSPM
-  DEP_FILE = CMakeFiles\JacobiSPM.dir\parallel2.cpp.obj.d
+build CMakeFiles/JacobiSPM.dir/parallel_chunks3_barrier.cpp.obj: CXX_COMPILER__JacobiSPM_Debug D$:/giaco/Programmi/C++Projects/JacobiSPM/parallel_chunks3_barrier.cpp || cmake_object_order_depends_target_JacobiSPM
+  DEP_FILE = CMakeFiles\JacobiSPM.dir\parallel_chunks3_barrier.cpp.obj.d
   FLAGS = -g -O3 -std=gnu++20
   OBJECT_DIR = CMakeFiles\JacobiSPM.dir
   OBJECT_FILE_DIR = CMakeFiles\JacobiSPM.dir
 
 build CMakeFiles/JacobiSPM.dir/utils/utimer.cpp.obj: CXX_COMPILER__JacobiSPM_Debug D$:/giaco/Programmi/C++Projects/JacobiSPM/utils/utimer.cpp || cmake_object_order_depends_target_JacobiSPM
   DEP_FILE = CMakeFiles\JacobiSPM.dir\utils\utimer.cpp.obj.d
+  FLAGS = -g -O3 -std=gnu++20
+  OBJECT_DIR = CMakeFiles\JacobiSPM.dir
+  OBJECT_FILE_DIR = CMakeFiles\JacobiSPM.dir\utils
+
+build CMakeFiles/JacobiSPM.dir/utils/utility.cpp.obj: CXX_COMPILER__JacobiSPM_Debug D$:/giaco/Programmi/C++Projects/JacobiSPM/utils/utility.cpp || cmake_object_order_depends_target_JacobiSPM
+  DEP_FILE = CMakeFiles\JacobiSPM.dir\utils\utility.cpp.obj.d
   FLAGS = -g -O3 -std=gnu++20
   OBJECT_DIR = CMakeFiles\JacobiSPM.dir
   OBJECT_FILE_DIR = CMakeFiles\JacobiSPM.dir\utils
@@ -75,7 +75,7 @@ build CMakeFiles/JacobiSPM.dir/utils/utimer.cpp.obj: CXX_COMPILER__JacobiSPM_Deb
 #############################################
 # Link the executable JacobiSPM.exe
 
-build JacobiSPM.exe: CXX_EXECUTABLE_LINKER__JacobiSPM_Debug CMakeFiles/JacobiSPM.dir/sequential.cpp.obj CMakeFiles/JacobiSPM.dir/parallel2.cpp.obj CMakeFiles/JacobiSPM.dir/utils/utimer.cpp.obj
+build JacobiSPM.exe: CXX_EXECUTABLE_LINKER__JacobiSPM_Debug CMakeFiles/JacobiSPM.dir/parallel_chunks3_barrier.cpp.obj CMakeFiles/JacobiSPM.dir/utils/utimer.cpp.obj CMakeFiles/JacobiSPM.dir/utils/utility.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\JacobiSPM.dir

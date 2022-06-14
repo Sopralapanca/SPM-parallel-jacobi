@@ -1,4 +1,1 @@
-"D:\giaco\Programmi\JetBrains\CLion 2021.3.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=D:/giaco/Programmi/JetBrains/CLion 2021.3.3/bin/ninja/win/ninja.exe" -G Ninja -S D:\giaco\Programmi\C++Projects\JacobiSPM -B D:\giaco\Programmi\C++Projects\JacobiSPM\cmake-build-debug
--- Configuring done
--- Generating done
--- Build files have been written to: D:/giaco/Programmi/C++Projects/JacobiSPM/cmake-build-debug
+CMakeLists.txt not found in D:\giaco\Programmi\C++Projects\JacobiSPM Select CMakeLists.txt
