@@ -95,7 +95,7 @@ int main(int argc, char * argv[]) {
 
     long u;
     {
-        utimer tpar("Par", &u);
+        utimer tpar("Parallel Chunks Threadpinned", &u);
         for(int tid=0; tid<nw; tid++){
             tids[tid] = thread(body, tid, ranges[tid]);
         }
@@ -108,14 +108,15 @@ int main(int argc, char * argv[]) {
     myfile.open ("./results/parallel_chunks_barrier_threadpinned.txt", std::ios_base::app);
 
     myfile << "Matrix size: " << n <<" iterations: "<< k << "\n";
-    myfile << "Workers: " << k << "\n";
+    myfile << "Workers: " << nw << "\n";
     myfile << "Total execution time: " << u <<" usec\n";
-    myfile << "Time per iteration: " << u/k <<" usec\n\n";
+    myfile << "Time per iteration: " << u/k <<" usec\n";
+    myfile << "Time per thread: " << (u/k)/nw <<" usec\n\n";
 
     myfile.close();
 
-    cout << "Total execution time: " << u <<"usec" << endl;
-    cout << "Time per iteration = " << u/k <<"usec"<< endl;
+    cout << "Time per iteration = " << u/k <<" usec"<< endl;
+    cout << "Time per thread: " << (u/k)/nw <<" usec" <<endl;
 
 
     if (check){

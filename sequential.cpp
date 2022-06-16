@@ -38,7 +38,7 @@ int main(int argc, char * argv[]) {
 
     long u;
     {
-        utimer tseq("Seq", &u);
+        utimer tseq("Sequential", &u);
         float sum=0;
         // numero di iterazioni
         for (int it=0; it<k; it++) {
@@ -63,8 +63,7 @@ int main(int argc, char * argv[]) {
 
     myfile.close();
 
-    cout << "Total execution time: " << u <<"usec" << endl;
-    cout << "Time per iteration = " << u/k <<"usec"<< endl;
+    cout << "Time per iteration = " << u/k <<" usec"<< endl;
 
     if (check){
         cout << "MATRIX A" << endl;
