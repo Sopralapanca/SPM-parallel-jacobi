@@ -55,7 +55,7 @@ int main(int argc, char * argv[]) {
                                 float sum = 0;
                                 for (int j = 0; j < n; j++) {
                                     if(j!=i){
-                                        sum = matrix[i][j] * x[j];
+                                        sum += matrix[i][j] * x[j];
                                     }
                                 }
 
@@ -73,13 +73,11 @@ int main(int argc, char * argv[]) {
     myfile << "Matrix size: " << n <<" iterations: "<< k << "\n";
     myfile << "Workers: " << nw << "\n";
     myfile << "Total execution time: " << u <<" usec\n";
-    myfile << "Time per iteration: " << u/k <<" usec\n";
-    myfile << "Time per thread: " << (u/k)/nw <<" usec\n\n";
+    myfile << "Time per iteration: " << u/k <<" usec\n\n";
 
     myfile.close();
 
     cout << "Time per iteration = " << u/k <<" usec"<< endl;
-    cout << "Time per thread: " << (u/k)/nw <<" usec" <<endl;
 
     if (check){
         cout << "MATRIX A" << endl;

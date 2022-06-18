@@ -35,25 +35,25 @@ int main(int argc, char * argv[]) {
 
     // initialize a vector with all zeroes to be used to find a solution using Jacobi
     vector<float> x(n, 0.0), new_x(n, 0.0);
-
+    float sum;
     long u;
     {
         utimer tseq("Sequential", &u);
-        float sum=0;
         // numero di iterazioni
         for (int it=0; it<k; it++) {
             //iterate over b and x
-
             for(int i=0; i<n;i++) {
+                sum=0;
                 for (int j = 0; j < n; j++) {
                     if(j!=i){
-                        sum = matrix[i][j] * x[j];
+                        sum += matrix[i][j] * x[j];
                     }
 
                 }
 
-                x[i] = (b[i] - sum) / matrix[i][i];
+                new_x[i] = (b[i] - sum) / matrix[i][i];
             }
+            x=new_x;
         }
     }
 
