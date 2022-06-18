@@ -53,8 +53,10 @@ int main(int argc, char * argv[]) {
                              chunk_size,
                             [&](const int i){
                                 float sum = 0;
-                                for (int j = i + 1; j < n; j++) {
-                                    sum = matrix[i][j] * x[j];
+                                for (int j = 0; j < n; j++) {
+                                    if(j!=i){
+                                        sum = matrix[i][j] * x[j];
+                                    }
                                 }
 
                                 new_x[i] = (b[i] - sum) / matrix[i][i];
@@ -80,16 +82,16 @@ int main(int argc, char * argv[]) {
     cout << "Time per thread: " << (u/k)/nw <<" usec" <<endl;
 
     if (check){
-        //cout << "MATRIX A" << endl;
-        //print_matrix(matrix, n);
+        cout << "MATRIX A" << endl;
+        print_matrix(matrix, n);
 
-        //cout << "vector b" << endl;
-        //print_vector(b);
+        cout << "vector b" << endl;
+        print_vector(b);
 
-        //cout << "vector x" << endl;
-        //print_vector(x);
+        cout << "vector x" << endl;
+        print_vector(x);
 
-        pf.ffStats(cout);
+        //pf.ffStats(cout);
     }
 
     return 0;

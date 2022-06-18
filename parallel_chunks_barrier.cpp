@@ -61,8 +61,10 @@ int main(int argc, char * argv[]) {
         while(iterations>0){
             float sum = 0;
             for (int i=ranges.first; i< ranges.second; i++){
-                for (int j = i + 1; j < n; j++) {
-                    sum = matrix[i][j] * x[j];
+                for (int j = 0; j < n; j++) {
+                    if(j!=i){
+                        sum = matrix[i][j] * x[j];
+                    }
                 }
                 new_x[i] = (b[i] - sum) / matrix[i][i];
             }

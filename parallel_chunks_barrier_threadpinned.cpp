@@ -15,10 +15,6 @@
 #include "./utils/utility.h"
 
 
-// execute with
-//for((i=1;i<33;i*=2)); do ./parallel2 20000 10 $i; done
-
-
 using namespace std;
 
 
@@ -73,8 +69,10 @@ int main(int argc, char * argv[]) {
 
             float sum = 0;
             for (int i=ranges.first; i< ranges.second; i++){
-                for (int j = i + 1; j < n; j++) {
-                    sum = matrix[i][j] * x[j];
+                for (int j = 0; j < n; j++) {
+                    if(j!=i){
+                        sum = matrix[i][j] * x[j];
+                    }
                 }
                 new_x[i] = (b[i] - sum) / matrix[i][i];
             }

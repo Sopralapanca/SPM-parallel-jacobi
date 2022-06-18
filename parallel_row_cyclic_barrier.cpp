@@ -62,8 +62,10 @@ int main(int argc, char * argv[]) {
             float sum = 0;
 
             for (int i=tid; i<n; i+=nw){
-                for (int j = i + 1; j < n; j++) {
-                    sum = matrix[i][j] * x[j];
+                for (int j = 0; j < n; j++) {
+                    if(j!=i){
+                        sum = matrix[i][j] * x[j];
+                    }
                 }
                 new_x[i] = (b[i] - sum) / matrix[i][i];
             }

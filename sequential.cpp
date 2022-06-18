@@ -45,8 +45,11 @@ int main(int argc, char * argv[]) {
             //iterate over b and x
 
             for(int i=0; i<n;i++) {
-                for (int j = i + 1; j < n; j++) {
-                    sum = matrix[i][j] * x[j];
+                for (int j = 0; j < n; j++) {
+                    if(j!=i){
+                        sum = matrix[i][j] * x[j];
+                    }
+
                 }
 
                 x[i] = (b[i] - sum) / matrix[i][i];
