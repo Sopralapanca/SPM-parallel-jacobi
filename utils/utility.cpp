@@ -11,7 +11,6 @@ random_device rd;
 mt19937 gen(rd());
 
 void print_matrix(vector<vector<float>> matrix, int size){
-    // Printing the  matrix
     for (int i = 0; i < size; i++){
         for (int j = 0; j < size; j++)
             cout << matrix[i][j] << " ";

@@ -14,8 +14,8 @@
 #include "./utils/utility.h"
 
 
-// execute with
-//for((i=1;i<33;i*=2)); do ./parallel2 20000 10 $i; done
+// to compile run
+// g++ ./utils/utility.cpp parallel_chunks_barrier.cpp -O3 -pthread -o parallel_chunks_barrier.out
 
 
 using namespace std;
@@ -94,12 +94,9 @@ int main(int argc, char * argv[]) {
     }
 
     ofstream myfile;
-    myfile.open ("./results/parallel_chunks_barrier.txt", std::ios_base::app);
+    myfile.open ("./results/parallel.csv", std::ios_base::app);
 
-    myfile << "Matrix size: " << n <<" iterations: "<< k << "\n";
-    myfile << "Workers: " << nw << "\n";
-    myfile << "Total execution time: " << u <<" usec\n";
-    myfile << "Time per iteration: " << u/k <<" usec\n\n";
+    myfile << n <<","<< nw <<"," << u <<","<<"chunks"<< endl;
 
     myfile.close();
 

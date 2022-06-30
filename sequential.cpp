@@ -8,8 +8,6 @@
 
 // to compile run
 // g++ ./utils/utility.cpp sequential.cpp -O3 -o sequential
-//if it is vectorizable
-// g++ sequential.cpp -O3 -funroll-loops -ftree-vectorize -fopt-info-vec-all -o sequential |& grep sequential
 
 using namespace std;
 
@@ -39,9 +37,7 @@ int main(int argc, char * argv[]) {
     long u;
     {
         utimer tseq("Sequential", &u);
-        // numero di iterazioni
         for (int it=0; it<k; it++) {
-            //iterate over b and x
             for(int i=0; i<n;i++) {
                 sum=0;
                 for (int j = 0; j < n; j++) {
@@ -58,11 +54,9 @@ int main(int argc, char * argv[]) {
     }
 
     ofstream myfile;
-    myfile.open ("./results/sequential.txt", std::ios_base::app);
+    myfile.open ("./results/sequential.csv", std::ios_base::app);
 
-    myfile << "Matrix size: " << n <<" iterations: "<< k << "\n";
-    myfile << "Total execution time: " << u <<" usec\n";
-    myfile << "Time per iteration: " << u/k <<" usec\n\n";
+    myfile << n <<"," << u << endl;
 
     myfile.close();
 

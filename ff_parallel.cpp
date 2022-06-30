@@ -9,14 +9,14 @@
 #include "./utils/utimer.cpp"
 #include "./utils/utility.h"
 
-// compile with g++ -I ../fastflow/ ./utils/utility.cpp -pthread -O3 ff_parallel.cpp  -o ff_parallel
+// compile with g++ -I ../fastflow/ ./utils/utility.cpp -pthread -O3 ff_parallel.cpp  -o ff_parallel.out
 
 using namespace std;
 
 
 int main(int argc, char * argv[]) {
-    if(argc != 6){
-        cout << "Usage: matrix_size number_of_iterations number_of_threads check_flag chunksize" << endl;
+    if(argc != 5){
+        cout << "Usage: matrix_size number_of_iterations number_of_threads check_flag" << endl;
         return (0);
     }
 
@@ -24,7 +24,6 @@ int main(int argc, char * argv[]) {
     int k = atoi(argv[2]); // number of iterations
     int nw = atoi(argv[3]);
     bool check = (atoi(argv[4]) == 0 ? false : true); // Boolean for debugging purposes
-    int chunk_size = atoi(argv[5]);
     int seed = 123; //int seed = atoi(argv[3]);
 
     // generate a random linear system
@@ -40,17 +39,15 @@ int main(int argc, char * argv[]) {
     // initialize a vector with all zeroes to be used to find a solution using Jacobi
     vector<float> x(n, 0.0), new_x(n, 0.0);
 
-    // number of workers nw
-    // use spinwaits instead of locks -> to use with small grain computations
-    // avoid barrier at the end of parallel for
-    ff::ParallelFor pf(nw, true, false);
+    // number of workers nw, use spinwaits instead of locks -> to use with small grain computations
+    ff::ParallelFor pf(nw, true);
 
     long u;
     {
         utimer tpar("FastFlow", &u);
         for (int it=0; it<k; it++) {
             pf.parallel_for(0, n, 1,
-                             chunk_size,
+                            0,
                             [&](const int i){
                                 float sum = 0;
                                 for (int j = 0; j < n; j++) {
@@ -68,12 +65,9 @@ int main(int argc, char * argv[]) {
     }
 
     ofstream myfile;
-    myfile.open ("./results/ff_parallel.txt", std::ios_base::app);
+    myfile.open ("./results/parallel.csv", std::ios_base::app);
 
-    myfile << "Matrix size: " << n <<" iterations: "<< k << "\n";
-    myfile << "Workers: " << nw << "\n";
-    myfile << "Total execution time: " << u <<" usec\n";
-    myfile << "Time per iteration: " << u/k <<" usec\n\n";
+    myfile << n <<","<< nw <<"," << u <<","<<"ff"<< endl;
 
     myfile.close();
 
