@@ -1,5 +1,3 @@
-DIR := ${CURDIR}
-
 CXX			= g++ -std=c++2a
 CXX11		= g++-11 -std=c++2a
 INCLUDES	= -I ../fastflow/

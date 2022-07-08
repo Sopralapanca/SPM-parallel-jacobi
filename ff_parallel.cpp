@@ -24,7 +24,7 @@ int main(int argc, char * argv[]) {
     int k = atoi(argv[2]); // number of iterations
     int nw = atoi(argv[3]);
     bool check = (atoi(argv[4]) == 0 ? false : true); // Boolean for debugging purposes
-    int seed = 123; //int seed = atoi(argv[3]);
+    int seed = 123;
 
     // generate a random linear system
     vector<vector<float>> matrix = GenerateRandomMatrix(n, seed);

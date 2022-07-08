@@ -3,11 +3,9 @@
 iterations=100
 
 for prog in "sequential" "par_chunks" "par_chunks_threadpinned" "par_cyc" "par_ff"; do
-
-  #rieseguire thread pinned
-
   for size in 500 5000 20000; do
       for((j=0;j<5;j++)); do
+
         if [ "$prog" = "sequential" ]; then
             ./sequential.out ${size} ${iterations} 0
         fi
