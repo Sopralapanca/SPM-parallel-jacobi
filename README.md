@@ -78,6 +78,6 @@ To create speedup, completion time and other tables with useful information, run
 Below are some results for completion time and speedup with matrixes of size 5000*500
 
 <p align="center">
-<img src="results/Completion%20Time%20Matrix%20Size%205000.png" height="50" />
-<img src="results/SPEEDUP%20Matrix%20Size%205000.png" height="50" />
+<img src="results/Completion%20Time%20Matrix%20Size%205000.png" height="250" />
+<img src="results/SPEEDUP%20Matrix%20Size%205000.png" height="250" />
 </p>
